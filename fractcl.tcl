@@ -55,5 +55,5 @@ proc triangle {pos size} {
 
 canvas .c -width 800 -height 600 -bg pink
 pack .c
-# snowflake .c 400 300 9 200 4
+# snowflake .c 400 300 7 200 4
 eval [concat {sierpinski .c} [triangle {400 300} 200] {6}]
