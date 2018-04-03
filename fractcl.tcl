@@ -53,7 +53,30 @@ proc triangle {pos size} {
                 [list [expr {$x - $size}] [expr {$y + $size}]]]
 }
 
+proc direction {p1 p2} {
+}
+
+proc rotate90 {v} {
+}
+
+proc scale {s v} {
+}
+
+proc move {p v} {
+}
+
+proc drawSquare {p s} {
+}
+
+proc fibonacciSpiral {can p1 s1 p2 s2} {
+    set s3 [expr {$s1 + $s2}]
+    set p3 [move $p1 [scale $s3 [rotate90 [direction $p1 $p2]]]]
+
+    drawSquare $can $p1 $s1
+    fibonacciSpiral $can $p2 $s2 $p3 $s3
+}
+
 canvas .c -width 800 -height 600 -bg pink
 pack .c
-# snowflake .c 400 300 7 200 4
-eval [concat {sierpinski .c} [triangle {400 300} 200] {6}]
+snowflake .c 400 300 7 200 4
+# eval [concat {sierpinski .c} [triangle {400 300} 200] {6}]
