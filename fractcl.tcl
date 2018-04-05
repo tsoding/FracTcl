@@ -97,12 +97,16 @@ proc drawSquare {can p s} {
     $can create rectangle $x $y [expr {$x + $s}] [expr {$y + $s}]
 }
 
-proc fibonacciSpiral {can p1 s1 p2 s2} {
+proc fibonacciSpiral {can p1 s1 p2 s2 level} {
+    if {$level <= 0} {
+        return
+    }
+
     set s3 [expr {$s1 + $s2}]
     set p3 [move $p1 [scale $s3 [rotate90 [direction $p1 $p2]]]]
 
     drawSquare $can $p1 $s1
-    fibonacciSpiral $can $p2 $s2 $p3 $s3
+    fibonacciSpiral $can $p2 $s2 $p3 $s3 [expr {$level - 1}]
 }
 
 canvas .c -width 800 -height 600 -bg pink
