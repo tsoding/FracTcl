@@ -65,7 +65,10 @@ proc scale {s v} {
 proc move {p v} {
 }
 
-proc drawSquare {p s} {
+proc drawSquare {can p s} {
+    set x [lindex $p 0]
+    set y [lindex $p 1]
+    $can create rectangle $x $y [expr {$x + $s}] [expr {$y + $s}]
 }
 
 proc fibonacciSpiral {can p1 s1 p2 s2} {
@@ -78,5 +81,5 @@ proc fibonacciSpiral {can p1 s1 p2 s2} {
 
 canvas .c -width 800 -height 600 -bg pink
 pack .c
-snowflake .c 400 300 7 200 4
+# snowflake .c 400 300 7 200 4
 # eval [concat {sierpinski .c} [triangle {400 300} 200] {6}]
