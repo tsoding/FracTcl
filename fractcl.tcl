@@ -53,28 +53,22 @@ proc triangle {pos size} {
                 [list [expr {$x - $size}] [expr {$y + $size}]]]
 }
 
-proc norm {x} {
-    if {$x == 0} {
-        return $x;
-    } else {
-        return [expr {$x / abs($x)}]
-    }
-}
-
-proc direction {p1 p2} {
-    set x1 [lindex $p1 0]
-    set y1 [lindex $p1 1]
-    set x2 [lindex $p2 0]
-    set y2 [lindex $p2 1]
-    set dx [expr {$x2 - $x1}]
-    set dy [expr {$y2 - $y1}]
-    return [list [norm $dx] [norm $dy]]
-}
-
 proc rotate90 {v} {
     set x [lindex $v 0]
     set y [lindex $v 1]
     return [list $y [expr {-$x}]]
+}
+
+proc rotateM90 {v} {
+    set x [lindex $v 0]
+    set y [lindex $v 1]
+    return [list [expr {-$y}] $x]
+}
+
+proc invert {v} {
+    set x [lindex $v 0]
+    set y [lindex $v 1]
+    return [list [expr {-$x}] [expr {-$y}]]
 }
 
 proc scale {s v} {
@@ -91,25 +85,32 @@ proc move {p v} {
     return [list [expr {$vx + $px}] [expr {$vy + $py}]]
 }
 
-proc drawSquare {can p s} {
-    set x [lindex $p 0]
-    set y [lindex $p 1]
-    $can create rectangle $x $y [expr {$x + $s}] [expr {$y + $s}]
+proc drawArc {can p1 p2 a} {
+    set x1 [lindex $p1 0]
+    set y1 [lindex $p1 1]
+    set x2 [lindex $p2 0]
+    set y2 [lindex $p2 1]
+
+    $can create arc [list $x1 $y1 $x2 $y2] -start $a -style arc -extent 90
 }
 
-proc fibonacciSpiral {can p1 s1 p2 s2 level} {
+proc fibonacciSpiral {can s1 s2 p1 v1 a level} {
     if {$level <= 0} {
         return
     }
 
-    set s3 [expr {$s1 + $s2}]
-    set p3 [move $p1 [scale $s3 [rotate90 [direction $p1 $p2]]]]
+    set p2 [move $p1 [scale $s2 $v1]]
+    set p3 [move $p2 [scale $s2 [rotate90 $v1]]]
+    set op [move [move $p1 [scale $s2 [invert $v1]]] [scale [expr {2 * $s2}] [rotateM90 [invert $v1]]]]
 
-    drawSquare $can $p1 $s1
-    fibonacciSpiral $can $p2 $s2 $p3 $s3 [expr {$level - 1}]
+    drawArc $can $p2 $op $a
+
+    fibonacciSpiral $can $s2 [expr {$s1 + $s2}] $p3 [rotate90 $v1] [expr {$a + 90}] [expr {$level - 1}]
 }
 
 canvas .c -width 800 -height 600 -bg pink
 pack .c
 # snowflake .c 400 300 7 200 4
 # eval [concat {sierpinski .c} [triangle {400 300} 200] {6}]
+fibonacciSpiral .c 0 10 {400 300} {1 0} 270 10
+
