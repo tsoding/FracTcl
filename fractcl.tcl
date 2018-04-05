@@ -78,6 +78,9 @@ proc rotate90 {v} {
 }
 
 proc scale {s v} {
+    set x [lindex $v 0]
+    set y [lindex $v 1]
+    return [list [expr {$x * $s}] [expr {$y * $s}]]
 }
 
 proc move {p v} {
