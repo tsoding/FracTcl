@@ -53,7 +53,22 @@ proc triangle {pos size} {
                 [list [expr {$x - $size}] [expr {$y + $size}]]]
 }
 
+proc norm {x} {
+    if {$x == 0} {
+        return $x;
+    } else {
+        return [expr {$x / abs($x)}]
+    }
+}
+
 proc direction {p1 p2} {
+    set x1 [lindex $p1 0]
+    set y1 [lindex $p1 1]
+    set x2 [lindex $p2 0]
+    set y2 [lindex $p2 1]
+    set dx [expr {$x2 - $x1}]
+    set dy [expr {$y2 - $y1}]
+    return [list [norm $dx] [norm $dy]]
 }
 
 proc rotate90 {v} {
