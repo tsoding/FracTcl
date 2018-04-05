@@ -84,6 +84,11 @@ proc scale {s v} {
 }
 
 proc move {p v} {
+    set vx [lindex $v 0]
+    set vy [lindex $v 1]
+    set px [lindex $p 0]
+    set py [lindex $p 1]
+    return [list [expr {$vx + $px}] [expr {$vy + $py}]]
 }
 
 proc drawSquare {can p s} {
