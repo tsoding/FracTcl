@@ -72,6 +72,9 @@ proc direction {p1 p2} {
 }
 
 proc rotate90 {v} {
+    set x [lindex $v 0]
+    set y [lindex $v 1]
+    return [list $y [expr {-$x}]]
 }
 
 proc scale {s v} {
